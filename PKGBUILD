@@ -57,16 +57,16 @@ _cmakeopts=('-D WITH_OPENGL=ON'
                '-D ENABLE_SSE3=OFF')
 
 prepare() {
-  cd "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer//)"-$pkgver"
+  cd "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer-rpi//)"-$pkgver"
   patch -p1 -i "$srcdir/5852.patch"
   # Patch gcc 6.1.1 -isystem compilation problem with c std headers, see https://github.com/Itseez/opencv/issues/6517
   patch -p1 -i "$srcdir/opencv_a0fdc91a14f07de25d858037940fcd3ba859b4e2.patch"
   # Vtk 7 need use of vtkRenderingOpenGL2 instead of vtkRenderingOpenGL
-  sed -i -e "s/\(vtkRenderingOpenGL\)/\12/g" "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer//)"-$pkgver/cmake/OpenCVDetectVTK.cmake"
+  sed -i -e "s/\(vtkRenderingOpenGL\)/\12/g" "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer-rpi//)"-$pkgver/cmake/OpenCVDetectVTK.cmake"
 }
 
 build() {
-  cd "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer//)"-$pkgver"
+  cd "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer-rpi//)"-$pkgver"
 
   cmake ${_cmakeopts[@]} \
     -DOPENCV_EXTRA_MODULES_PATH="$srcdir/opencv_contrib-$pkgver/modules" \
@@ -80,20 +80,20 @@ package_opencv-gstreamer-rpi() {
   conflicts=('opencv')
   options=('staticlibs')
 
-  cd "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer//)"-$pkgver"
+  cd "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer-rpi//)"-$pkgver"
 
   make DESTDIR="$pkgdir" install
 
   # install license file
-  install -Dm644 "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer//)"-$pkgver/LICENSE" \
-    "$pkgdir/usr/share/licenses/"$(echo $pkgname | sed -e s/-gstreamer//)"/LICENSE"
+  install -Dm644 "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer-rpi//)"-$pkgver/LICENSE" \
+    "$pkgdir/usr/share/licenses/"$(echo $pkgname | sed -e s/-gstreamer-rpi//)"/LICENSE"
 
   cd "$pkgdir/usr/share"
 
   # separate samples package; also be -R friendly
   if [[ -d OpenCV/samples ]]; then
-    mv OpenCV/samples "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer//)"-samples"
-    mv OpenCV "$(echo $pkgname | sed -e s/-gstreamer//)" # otherwise folder naming is inconsistent
+    mv OpenCV/samples "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer-rpi//)"-samples"
+    mv OpenCV "$(echo $pkgname | sed -e s/-gstreamer-rpi//)" # otherwise folder naming is inconsistent
   elif [[ ! -d OpenCV ]]; then
     warning "Directory naming issue; samples package may not be built!"
   fi
@@ -111,7 +111,7 @@ package_opencv-gstreamer-rpi-samples() {
 
   # install license file
   install -Dm644 "$srcdir/opencv-$pkgver/LICENSE" \
-    "$pkgdir/usr/share/licenses/"$(echo $pkgname | sed -e s/-gstreamer//)"/LICENSE"
+    "$pkgdir/usr/share/licenses/"$(echo $pkgname | sed -e s/-gstreamer-rpi//)"/LICENSE"
 }
 
 # vim:set ts=2 sw=2 et:
