@@ -44,8 +44,9 @@ _cmakeopts=('-D WITH_OPENGL=ON'
             '-D CMAKE_BUILD_TYPE=Release'
             '-D CMAKE_INSTALL_PREFIX=/usr'
             '-D CMAKE_SKIP_RPATH=ON'
-            '-D ENABLE_VFPV3=ON'
-            '-D ENABLE_NEON=ON'
+            '-D USE_RPI_O=ON'
+            #'-D ENABLE_VFPV3=ON'
+            #'-D ENABLE_NEON=ON'
             #'-D WITH_IPP=ON'             '-D FORCE_VTK=ON'
             #'-D INSTALL_CREATE_DISTRIB=ON'
             )
@@ -76,8 +77,8 @@ build() {
 }
 
 package_opencv-gstreamer-rpi() {
-  provides=('opencv')
-  conflicts=('opencv')
+  provides=('opencv' 'opencv-gstreamer')
+  conflicts=('opencv' 'opencv-gstreamer')
   options=('staticlibs')
 
   cd "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer-rpi//)"-$pkgver"
@@ -100,10 +101,10 @@ package_opencv-gstreamer-rpi() {
 }
 
 package_opencv-gstreamer-rpi-samples() {
-  provides=('opencv-samples')
-  conflicts=('opencv-samples')
+  provides=('opencv-samples' 'opencv-gstreamer-samples')
+  conflicts=('opencv-samples' 'opencv-gstreamer-samples')
   pkgdesc+=" (samples)"
-  depends=("opencv-gstreamer=$pkgver") # sample codes change with lib/API
+  depends=("opencv-gstreamer-rpi=$pkgver") # sample codes change with lib/API
   unset optdepends
 
   mkdir -p "$pkgdir/usr/share/opencv"
